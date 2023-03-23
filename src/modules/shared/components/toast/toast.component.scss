@@ -1,0 +1,38 @@
+.toaster {
+  position: absolute;
+  z-index: 3;
+  top: 60px;
+  right: 15px;
+  background-color: white;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    border: 1px solid #9c9c9c;
+    padding: 5px;
+    border-radius: 5px;
+    box-shadow: 3px 0 4px 1px rgb(156, 156, 156);
+    margin-bottom: 10px;
+
+    &__title {
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 5px;
+
+      .success {
+        color: green;
+        font-weight: 900;
+      }
+
+      .failed {
+        color: red;
+        font-weight: 900;
+      }
+
+      .close-icon {
+        cursor: pointer;
+      }
+    }
+  }
+}

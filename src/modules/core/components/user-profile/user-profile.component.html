@@ -1,0 +1,8 @@
+<app-header [userData$]="user$"></app-header>
+<section class="user">
+  <div>Name: {{ (user$ | async)?.name }}</div>
+
+  <div>Email: {{ (user$ | async)?.email }}</div>
+
+</section>
+<img [src]="userAvatar$ | async" alt="avatar" width="300px" height="300px">

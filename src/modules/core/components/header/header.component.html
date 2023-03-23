@@ -1,0 +1,48 @@
+<section class="login-section" *ngIf="!(userData$ | async) else logOutTemp">
+  <button class="login-button"
+          mat-stroked-button
+          routerLink="/login"
+  >Login</button>
+</section>
+
+<ng-template #logOutTemp>
+  <section class="logged-in-section">
+    <div class="left-side">
+      <a class="home-btn"
+         routerLink="/home"
+         matTooltip="To home page"
+      >
+        <h2>Home</h2>
+      </a>
+    </div>
+
+    <div class="right-side">
+      <app-select-menu #menu>
+        <button mat-stroked-button [routerLink]="['/user-profile', userData$ | async]">
+          <mat-icon>person</mat-icon>
+          User profile
+        </button>
+
+        <button mat-stroked-button (click)="logOut()">
+          <mat-icon>logout</mat-icon>
+          Logout
+        </button>
+      </app-select-menu>
+
+      <div class="notification">
+        <span *ngIf="notificationSign$ | async" class="notification__sign"></span>
+        <app-select-menu #notificationsList>
+          <div class="notification__item" *ngFor="let notify of notifications$ | async">
+            {{ notify }}
+          </div>
+        </app-select-menu>
+
+        <mat-icon class="notification__icon" (click)="openMenu()">notifications</mat-icon>
+      </div>
+
+      <div (click)="menu.show()">
+        <img class="avatar" [src]="userAvatar$ | async" alt="avatar">
+      </div>
+    </div>
+  </section>
+</ng-template>

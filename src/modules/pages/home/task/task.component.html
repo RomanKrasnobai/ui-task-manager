@@ -1,0 +1,49 @@
+<div class="main" *ngIf="tasks$ | async else loading">
+  <h4>My Tasks:</h4>
+
+  <div class="main__tasks-block" *ngFor="let task of (tasks$ | async) let i = index">
+    <ng-container *ngIf="i !== index">
+      <span class="main__tasks-block__item">
+        {{ i + 1 }}. {{ task.description }}
+      </span>
+
+      <mat-checkbox [checked]="task.completed" [disabled]="i !== index"></mat-checkbox>
+    </ng-container>
+
+    <app-edit-task *ngIf="i === index"
+                   [task]="task"
+                   (emitCancel)="cancelSaving($event)"
+                   (emitSavingTask)="saveEditTask($event)"
+    ></app-edit-task>
+
+    <div class="actions" *ngIf="i !== index">
+      <button (click)="editTask(task, i)"
+              mat-icon-button
+              color="primary"
+              matTooltip="Edit"
+      >
+        <mat-icon>edit</mat-icon>
+      </button>
+
+      <button mat-icon-button
+              color="warn"
+              matTooltip="Remove"
+              (click)="removeTask(task)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+  <button mat-raised-button
+          color="primary"
+          (click)="createNewTask()"
+  >
+    Create a new task
+  </button>
+</div>
+
+<ng-template #loading>
+  <app-loading-spinner [diameter]="40"></app-loading-spinner>
+</ng-template>

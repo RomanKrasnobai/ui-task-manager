@@ -1,0 +1,24 @@
+<form class="edit-form" [formGroup]="taskForm">
+  <app-text-area [formControlName]="'description'"></app-text-area>
+
+  <mat-checkbox formControlName="completed"></mat-checkbox>
+
+  <button mat-icon-button
+          color="primary"
+          [disabled]="taskForm.invalid"
+          (click)="saveTask()"
+          matTooltip="Save"
+  >
+    <mat-icon>done</mat-icon>
+  </button>
+
+  <button mat-icon-button
+          color="primary"
+          (click)="cancel()"
+          matTooltip="Cancel"
+  >
+    <mat-icon>close</mat-icon>
+  </button>
+</form>
+
+<div class="error-message" *ngIf="taskForm.invalid">Invalid form value</div>

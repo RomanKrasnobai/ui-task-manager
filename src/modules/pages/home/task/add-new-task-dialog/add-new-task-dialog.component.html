@@ -1,0 +1,22 @@
+<h3 mat-dialog-title>Create a new task</h3>
+
+<mat-dialog-content>
+  <form class="form-task" [formGroup]="createTaskForm">
+    <app-text-area [formControlName]="'description'"
+                   [placeholder]="'Add a new task'"
+    ></app-text-area>
+
+    <mat-checkbox formControlName="completed">Completed</mat-checkbox>
+  </form>
+
+  <div class="error-message" *ngIf="createTaskForm.invalid">Invalid form value</div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-raised-button
+          color="primary"
+          [disabled]="createTaskForm.invalid"
+          (click)="createNewTask()"
+  >Create</button>
+  <button mat-raised-button color="warn" (click)="close()">Cancel</button>
+</mat-dialog-actions>

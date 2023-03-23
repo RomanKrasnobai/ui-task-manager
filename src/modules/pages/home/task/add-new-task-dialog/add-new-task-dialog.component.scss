@@ -1,0 +1,15 @@
+mat-dialog-content {
+  height: 150px;
+
+  .form-task {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+  }
+}
+
+.error-message {
+  font-size: 12px;
+  font-weight: 900;
+  color: red;
+}

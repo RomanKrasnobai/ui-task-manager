@@ -1,0 +1,15 @@
+<div class="toaster">
+  <div class="toaster__item" *ngFor="let event of (toastEvents$ | async) let i = index">
+    <div class="toaster__item__title">
+      <div [ngClass]="event.type === toastEventsType.SUCCESS ? 'success' : 'failed'">
+        {{ event.title }}
+      </div>
+
+      <div class="close-icon" (click)="removeEvent(i)">
+        <mat-icon>close</mat-icon>
+      </div>
+    </div>
+
+    <div>{{ event.message }}</div>
+  </div>
+  </div>
