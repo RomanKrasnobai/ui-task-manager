@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.userData$
       .pipe(
-        switchMap((user: any) => this.userService.getUserAvatar(user._id)),
+        switchMap((user: User) => this.userService.getUserAvatar(user._id)),
         takeUntil(this.destroy$)
       ).subscribe();
   }

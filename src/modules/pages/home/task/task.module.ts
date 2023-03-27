@@ -7,12 +7,14 @@ import {TaskComponent} from "./task.component";
 import {EditTaskComponent} from "./edit-task/edit-task.component";
 import {AddNewTaskComponentDialog} from "./add-new-task-dialog/add-new-task-dialog.component";
 import {SharedModule} from "../../../shared/shared.module";
+import { TaskItemComponent } from './task-item/task-item.component';
 
 @NgModule({
   declarations: [
     TaskComponent,
     EditTaskComponent,
-    AddNewTaskComponentDialog
+    AddNewTaskComponentDialog,
+    TaskItemComponent
   ],
   imports: [
     CommonModule,

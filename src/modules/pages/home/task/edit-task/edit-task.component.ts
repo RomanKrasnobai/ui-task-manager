@@ -10,7 +10,7 @@ import {TaskFormModel} from "../../../../shared/models/task-form.model";
   styleUrls: ['./edit-task.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EditTaskComponent implements OnInit{
+export class EditTaskComponent implements OnInit {
   taskForm: FormGroup = new FormGroup<TaskFormModel>({
     description: new FormControl('', [
       Validators.required,

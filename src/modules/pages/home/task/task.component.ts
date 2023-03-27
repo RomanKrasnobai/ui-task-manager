@@ -8,7 +8,7 @@ import {
   OnInit,
   Self
 } from '@angular/core';
-import {catchError, map, Observable, of, takeUntil, tap} from "rxjs";
+import {catchError, finalize, map, Observable, of, takeUntil, tap} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 import {TasksModel} from "../../../shared/models/tasks.model";
 import {TasksService} from "../../../core/services/tasks.service";
@@ -32,8 +32,6 @@ export class TaskComponent implements OnInit, OnDestroy {
   tasks$: Observable<TasksModel[]>;
 
   editedTasks: TasksModel[];
-
-  isSaved: boolean = false;
 
   index: number | null;
 
@@ -70,48 +68,40 @@ export class TaskComponent implements OnInit, OnDestroy {
   //   });
   // }
 
-  canDeactivate(): Observable<boolean> {
-    return this.isAllowedNavigation();
-  }
+  // canDeactivate(): Observable<boolean> {
+  //   return this.isAllowedNavigation();
+  // }
 
-  editTask(task: TasksModel, index: number): void {
-    this.index = index;
-  }
-
-  saveEditTask(task: { id: string, form: TasksModel }): void {
+  saveTaskAfterEdition(task: { id: string, form: TasksModel }): void {
     this.tasksService.editTask(task.id, task.form)
       .pipe(
         catchError(err => of(err)),
-        takeUntil(this.destroy$)
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.notificationsService.emitNewNotification(`"${task.form.description}" - was edited`);
+
+          this.toastService.emitToastEvent(
+            {
+              title: 'Task edit',
+              message: 'Task was successfully edited',
+              type: ToastEventsType.SUCCESS
+            }
+          );
+
+          this.notificationsService.notificationSign$.next(true);
+        })
       )
       .subscribe((res: TasksModel) => {
         this.editedTasks = this.editedTasks.map(el => {
           if (el._id === res._id) {
-            // Object.assign(el, res);
             el = { ...res };
           }
           return el;
         });
         this.tasks$ = of(this.editedTasks);
-        this.isSaved = true;
 
-        this.notificationsService._notifications.next(
-          [...this.notificationsService._notifications.getValue(), `"${task.form.description}" - was edited`]
-        );
-
-        this.toastService.emitToastEvent(
-          {
-                title: 'Task edit',
-                message: 'Task was successfully edited',
-                type: ToastEventsType.SUCCESS
-            }
-        );
-
-        this.notificationsService.notificationSign$.next(true);
         this.cd.markForCheck();
       });
-
-    this.index = null;
   }
 
   createNewTask(): void {
@@ -130,71 +120,62 @@ export class TaskComponent implements OnInit, OnDestroy {
 
   removeTask(task: TasksModel): void {
     const index = this.editedTasks.findIndex(taskEle => taskEle._id === task._id);
+
     if (index > -1) {
       this.editedTasks.splice(index, 1);
       this.tasksService.removeTask(task._id)
         .pipe(
           catchError(err => of(err)),
-          takeUntil(this.destroy$)
-        )
-        .subscribe(() => {
-          this.notificationsService._notifications.next(
-            [...this.notificationsService._notifications.getValue(), `"${task.description}" - was removed`]
-          );
-
-          this.toastService.emitToastEvent(
-            {
-              title: 'Task removed',
-              message: 'Task was successfully removed',
-              type: ToastEventsType.SUCCESS
-            }
-          );
-
-          this.notificationsService.notificationSign$.next(true);
-          this.cd.markForCheck();
-        });
-    }
-  }
-
-  cancelSaving(event: boolean) {
-    this.index = null;
-  }
-
-  private savingNewTaskReq(data: AddTaskModel) {
-    this.tasksService.addNewTask(data)
-      .pipe(
-        catchError(err => of(err)),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(
-        (newTask: TasksModel) => {
-          if (newTask) {
-            this.editedTasks.push(newTask);
-            this.isSaved = true;
-
-            this.notificationsService._notifications.next(
-              [...this.notificationsService._notifications.getValue(), `"${data.description}" - was created`]
-            );
+          takeUntil(this.destroy$),
+          finalize(() => {
+            this.notificationsService.emitNewNotification(`"${task.description}" - was removed`);
 
             this.toastService.emitToastEvent(
               {
-                title: 'Task creation',
-                message: 'Task was successfully created',
+                title: 'Task removed',
+                message: 'Task was successfully removed',
                 type: ToastEventsType.SUCCESS
               }
             );
 
             this.notificationsService.notificationSign$.next(true);
             this.cd.markForCheck();
+          })
+        ).subscribe();
+    }
+  }
+
+  private savingNewTaskReq(data: AddTaskModel) {
+    this.tasksService.addNewTask(data)
+      .pipe(
+        catchError(err => of(err)),
+        takeUntil(this.destroy$),
+        finalize(() => {
+          this.notificationsService.emitNewNotification(`"${data.description}" - was created`);
+
+          this.toastService.emitToastEvent(
+            {
+              title: 'Task creation',
+              message: 'Task was successfully created',
+              type: ToastEventsType.SUCCESS
+            }
+          );
+
+          this.notificationsService.notificationSign$.next(true);
+        })
+      ).subscribe((newTask: TasksModel) => {
+          if (newTask) {
+            this.editedTasks.push(newTask);
+            this.cd.markForCheck();
           }
         })
   }
 
-  private isAllowedNavigation(beforeunloadEvent = false): Observable<boolean> {
-    if (!this.isSaved || beforeunloadEvent) {
-      const result = window.confirm('There are unsaved changes! Are you sure?');
-      return of(result);
-    }
-    return of(true);
-  }
+  // private isAllowedNavigation(beforeunloadEvent = false): Observable<boolean> {
+  //   if (!this.isSaved || beforeunloadEvent) {
+  //     const result = window.confirm('There are unsaved changes! Are you sure?');
+  //     return of(result);
+  //   }
+  //   return of(true);
+  // }
 }

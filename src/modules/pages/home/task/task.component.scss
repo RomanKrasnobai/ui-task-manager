@@ -1,16 +1,10 @@
 .main {
   padding: 50px 0 0 20px;
 
-  &__tasks-block {
+  &__task {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
-
-    &__item {
-      font-size: 14px;
-      font-weight: 600;
-    }
   }
-
 }
 

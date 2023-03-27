@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import {BehaviorSubject, Observable, Subject} from "rxjs";
+import {BehaviorSubject, Observable} from "rxjs";
+
 
 @Injectable({
   providedIn: 'root'
@@ -9,4 +10,10 @@ export class NotificationsService {
   notifications$: Observable<string[]> = this._notifications.asObservable();
 
   notificationSign$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  emitNewNotification(notification: string) {
+    this._notifications.next(
+      [...this._notifications.getValue(), notification]
+    );
+  }
 }

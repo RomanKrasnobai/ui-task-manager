@@ -1,9 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {catchError, map, Observable, of, takeUntil} from "rxjs";
-import {UserService} from "../../services/user.service";
-import {User} from "../../../shared/models/user.model";
-import {DestroyService} from "../../../shared/services/destroy.service";
+import {UserService} from "../../core/services/user.service";
+import {User} from "../../shared/models/user.model";
+import {DestroyService} from "../../shared/services/destroy.service";
 
 @Component({
   selector: 'app-user-profile',

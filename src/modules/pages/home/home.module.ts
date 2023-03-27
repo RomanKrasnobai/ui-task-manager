@@ -6,7 +6,6 @@ import {HeaderComponent} from "../../core/components/header/header.component";
 import {RouterLink} from "@angular/router";
 import {MaterialModule} from "../../../app/material.module";
 import {SharedModule} from "../../shared/shared.module";
-// import {LeaveTasksPageGuard} from "./services/leave-tasks-page.guard";
 
 
 @NgModule({
@@ -24,6 +23,5 @@ import {SharedModule} from "../../shared/shared.module";
   exports: [
     HeaderComponent
   ],
-  // providers: [LeaveTasksPageGuard]
 })
 export class HomeModule { }

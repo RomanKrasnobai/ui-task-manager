@@ -1,0 +1,32 @@
+<div class="item-task" *ngIf="i !== index">
+  <div>
+    <div class="item-task__title">{{ i + 1 }}. {{ task.description }}</div>
+    <div class="item-task__task-date">({{ task.createdAt | date: 'dd/MM/YYYY' }})</div>
+  </div>
+
+  <mat-checkbox [checked]="task.completed" [disabled]="i !== index"></mat-checkbox>
+</div>
+
+<app-edit-task *ngIf="i === index"
+               [task]="task"
+               (emitCancel)="cancelSaving()"
+               (emitSavingTask)="saveEditionTask($event)"
+></app-edit-task>
+
+<div class="actions" *ngIf="i !== index">
+  <button (click)="editTask(i)"
+          mat-icon-button
+          color="primary"
+          matTooltip="Edit"
+  >
+    <mat-icon>edit</mat-icon>
+  </button>
+
+  <button mat-icon-button
+          color="warn"
+          matTooltip="Remove"
+          (click)="removeTask(task)"
+  >
+    <mat-icon>delete</mat-icon>
+  </button>
+</div>

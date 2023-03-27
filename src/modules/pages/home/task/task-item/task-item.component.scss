@@ -1,0 +1,26 @@
+:host {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .item-task {
+    display: flex;
+    align-items: center;
+    flex: 1 2 350px;
+
+    &__title {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    &__task-date {
+      color: grey;
+    }
+  }
+
+  .actions {
+    display: flex;
+    flex: 2 1 110px;
+    margin-left: 5px;
+  }
+}

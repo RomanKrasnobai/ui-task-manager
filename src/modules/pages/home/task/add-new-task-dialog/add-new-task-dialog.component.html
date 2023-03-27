@@ -18,5 +18,9 @@
           [disabled]="createTaskForm.invalid"
           (click)="createNewTask()"
   >Create</button>
-  <button mat-raised-button color="warn" (click)="close()">Cancel</button>
+
+  <button mat-raised-button
+          color="warn"
+          (click)="close()"
+  >Cancel</button>
 </mat-dialog-actions>
